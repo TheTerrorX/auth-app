@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const ejs = require('ejs');
 const mongoose = require('mongoose');
 const encrypt = require('mongoose-encryption')
+require('dotenv').config();
 //Set up default mongoose connection
 var mongoDB = 'mongodb://127.0.0.1:27017/authDB';
 
@@ -18,14 +19,12 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-
 const userSchema = new mongoose.Schema({
     email: String,
     password: String
 });
 
-const secret = "terror";
-userSchema.plugin(encrypt, {secret: secret, encryptedFields: ["password"]});
+userSchema.plugin(encrypt, { secret: process.env.SECRET, encryptedFields: ["password"] });
 
 const User = mongoose.model('User', userSchema);
 
